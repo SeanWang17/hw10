@@ -1,0 +1,5 @@
+1. compile: nvcc dense2csr_GPU.cu -lmpi -I/sw/openmpi/2.1.1/include -L/sw/openmpi/2.1.1/lib -o dense2csr
+   run: srun -N 1 -w d15 ./dense2csr matrix_size 
+
+2. compile: nvcc SpMV.cu -lmpi -lm -I/sw/openmpi/2.1.1/include -L/sw/openmpi/2.1.1/lib -o SpMV
+   run: srun -N 1 -w d15 ./SpMV matrix_size 

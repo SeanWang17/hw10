@@ -1,0 +1,71 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]
+  then
+	echo "$0 loop"
+	exit
+  fi
+
+out=0.0
+   rm -f result-SpMV-10000 
+   for i in `seq 1024 1024 8192`
+     do
+      time=0
+      echo $i
+      for loop in `seq 1 $1`
+         do
+                #out=`srun -N 1 -w d15 ./SpMV-10000 $i | grep "time" | awk '{print $6}'`
+                out=`./SpMV-10000 $i | grep "time" | awk '{print $6}'`
+                time=`echo "$time + $out" | bc`
+                wait
+         done
+       echo "$i `echo "$time/$1" | bc -l`" >> result-SpMV-10000 
+   done
+
+out=0.0
+   rm -f result-SpMV-1
+   for i in `seq 1024 1024 8192`
+     do
+      time=0
+      echo $i
+      for loop in `seq 1 $1`
+         do
+                #out=`srun -N 1 -w d15 ./SpMV-1 $i | grep "time" | awk '{print $6}'`
+                out=`./SpMV-1 $i | grep "time" | awk '{print $6}'`
+                time=`echo "$time + $out" | bc`
+                wait
+         done
+       echo "$i `echo "$time/$1" | bc -l`" >> result-SpMV-1
+   done
+
+out=0.0
+   rm -f result-SpMV-trid
+   for i in `seq 1024 1024 8192`
+     do
+      time=0
+      echo $i
+      for loop in `seq 1 $1`
+         do
+                #out=`srun -N 1 -w d15 ./SpMV-trid $i | grep "time" | awk '{print $6}'`
+                out=`./SpMV-trid $i | grep "time" | awk '{print $6}'`
+                time=`echo "$time + $out" | bc`
+                wait
+         done
+       echo "$i `echo "$time/$1" | bc -l`" >> result-SpMV-trid
+   done
+
+out=0.0
+   rm -f result-GeMV-1
+   for i in `seq 1024 1024 8192`
+     do
+      time=0
+      echo $i
+      for loop in `seq 1 $1`
+         do
+                #out=`srun -N 1 -w d15 ./GeMV-1 $i | grep "time" | awk '{print $6}'`
+                out=`./GeMV-1 $i | grep "time" | awk '{print $6}'`
+                time=`echo "$time + $out" | bc`
+                wait
+         done
+       echo "$i `echo "$time/$1" | bc -l`" >> result-GeMV-1
+   done

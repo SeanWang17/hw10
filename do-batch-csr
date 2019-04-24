@@ -1,0 +1,23 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]
+  then
+	echo "$0 loop"
+	exit
+  fi
+
+out=0.0
+   rm -f result 
+   for i in `seq 1024 1024 8192`
+     do
+      time=0
+      echo $i
+      for loop in `seq 1 $1`
+         do
+                out=`srun -N 1 -w d15 ./dense2csr $i | grep "time" | awk '{print $6}'`
+                time=`echo "$time + $out" | bc`
+                wait
+         done
+       echo "$i `echo "$time/$1" | bc -l`" >> result 
+   done
+
